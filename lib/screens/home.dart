@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myskul/controllers/chat_controller.dart';
@@ -15,6 +17,8 @@ import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:myskul/controllers/home_controller.dart';
 
 class Home extends StatefulWidget {
   Home({required this.user});
@@ -24,6 +28,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   var couleurs = ColorHelper();
@@ -38,6 +43,14 @@ class _HomeState extends State<Home> {
     "phone.jpg",
     "image1.png",
   ];
+
+  getUser() async {
+    final SharedPreferences prefs = await _prefs;
+
+    var userString = await prefs.getString('user');
+    var userJson = jsonDecode(userString!);
+    widget.user = User.fromJson(userJson);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,12 +142,13 @@ class _HomeState extends State<Home> {
                           ),
                         ],
                         options: CarouselOptions(
-                            height: 300.0,
-                            enlargeCenterPage: true,
-                            autoPlay: true,
-                            aspectRatio: 10,
-                            enableInfiniteScroll: true,
-                            viewportFraction: 1.2,),
+                          height: 300.0,
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          aspectRatio: 10,
+                          enableInfiniteScroll: true,
+                          viewportFraction: 1.2,
+                        ),
                       ),
                     ]),
                   ),
@@ -209,12 +223,13 @@ class _HomeState extends State<Home> {
                           ),
                         ],
                         options: CarouselOptions(
-                            height: 50.0,
-                            enlargeCenterPage: true,
-                            autoPlay: true,
-                            aspectRatio: 10,
-                            enableInfiniteScroll: true,
-                            viewportFraction: 1.2,),
+                          height: 50.0,
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          aspectRatio: 10,
+                          enableInfiniteScroll: true,
+                          viewportFraction: 1.2,
+                        ),
                       ),
                     ]),
                   ),
@@ -258,7 +273,7 @@ class _HomeState extends State<Home> {
                               texte: "Quiz",
                               couleur: Colors.blue,
                               function: () {
-                                Get.to(()=>QuizList(user: widget.user));
+                                Get.to(() => QuizList(user: widget.user));
                               },
                             ),
                             DashBox(
@@ -275,7 +290,7 @@ class _HomeState extends State<Home> {
                               texte: "Chat",
                               couleur: Colors.pink,
                               function: () {
-                                Get.to(()=>GroupChat(user: widget.user));
+                                Get.to(() => GroupChat(user: widget.user));
                               },
                             ),
                             SizedBox()
