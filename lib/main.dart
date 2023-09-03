@@ -1,48 +1,54 @@
-import 'dart:math';
-import 'package:myskul/screens/account/account.dart';
-import 'package:myskul/screens/auth/domain.dart';
+import 'dart:convert';
+//import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:myskul/controllers/chat_controller.dart';
 import 'package:myskul/screens/chat/chat_group_list.dart';
-import 'test.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myskul/controllers/home_controller.dart';
 import 'package:myskul/models/user.dart';
 import 'package:myskul/screens/auth/login.dart';
 import 'package:myskul/screens/home.dart';
 import 'package:myskul/utilities/colors.dart';
 import 'screens/splash.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:myskul/translations/translation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 
-bool? seen;
-String? token;
-String? locale;
-late User user;
+bool?
+    seen; // Cette variable va permettre d'afficher le splash screen une seule fois
+String? token; // Token d'authentification de l'utlisateur
+String? locale; // Cette variable nous permettra de gérer la langue utilisée
+String?
+    fmToken; // Cette variable nous permettra d'envoyer des notifications sur chaque appareil
+late User user; // Ici sera stocké l'utilisateur principal
+
+// fonction pour capture les notification et faire des actions lorsqu'on les reçoit
+// @pragma("vm:entry-point")
+// Future<void> onActionReceivedMethod(ReceivedAction receivedAction) async {
+//   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+//     final prefs = await _prefs;
+//     var userString = await prefs.getString('user');
+//     var userJson = jsonDecode(userString!);
+//     user = User.fromJson(userJson);
+//   Get.to(() => GroupChat(user: user));
+// }
+
 void main() async {
-  // HttpOverrides.global = MyHttpOverrides();
-
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Initialisation de firebase
 
-  await Firebase.initializeApp();
+  // Initialisation de firebase messaging et awesome notifications
+ // await messagingInit();
+
+  // Initialisation du package SharedPreferences
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  final Future<SharedPreferences> _prefs2 = SharedPreferences.getInstance();
-
   final SharedPreferences prefs = await _prefs;
-  final SharedPreferences prefs2 = await _prefs2;
-  seen = await prefs2.getBool('first');
-  token = await prefs.getString('token');
-  locale = await prefs.getString('locale');
-  if (token != null) {
-    user = await HomeController().currentUser();
-  }
 
-  if (locale != null) {
-    Get.updateLocale(Locale(locale!));
-  }
+  // lignes de codes afférentes aux SharedPreferences
+
+  await shMethods(prefs);
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
@@ -50,13 +56,59 @@ void main() async {
   );
 }
 
-// class MyHttpOverrides extends HttpOverrides {
-//   @override
-//   HttpClient createHttpClient(SecurityContext? context) {
-//     return super.createHttpClient(context)
-//       ..badCertificateCallback =
-//           (X509Certificate cert, String host, int port) => true;
-//   }
+Future<void> shMethods(SharedPreferences prefs) async {
+  seen = await prefs.getBool('first');
+  token = await prefs.getString('token');
+ // fmToken = await prefs.getString('fmToken');
+  locale = await prefs.getString('locale');
+
+  if (locale != null) {
+    Get.updateLocale(Locale(locale!));
+  }
+  // if (fmToken == null) {
+  //   var tmp = await ChatController().getFmToken();
+  //   await prefs.setString('fmToken', tmp);
+  // }
+}
+
+// Future<void> messagingInit() async {
+//   FirebaseMessaging.onBackgroundMessage(notify);
+//   // await AwesomeNotifications().setListeners(
+//   //   onActionReceivedMethod: onActionReceivedMethod,
+//   // );
+
+//   FirebaseMessaging.instance
+//       .setForegroundNotificationPresentationOptions(alert: true, sound: true);
+//   FirebaseMessaging.onMessage.listen(
+//     (m) {
+//     //  notify(m);
+//     },
+//   );
+
+//   FirebaseMessaging.onMessageOpenedApp.listen(
+//     (m) {
+//       print("OnMessageOpenedAp : ${m.data}");
+//     },
+//   );
+
+//   // AwesomeNotifications().initialize(
+//   //   'resource://drawable/res_app_ico',
+//   //   [
+//   //     NotificationChannel(
+//   //       channelKey: 'MySkul',
+//   //       channelName: 'MySkul',
+//   //       channelDescription: 'MySkul Notification',
+//   //       playSound: true,
+//   //       importance: NotificationImportance.Max,
+//   //       defaultColor: ColorHelper().green,
+//   //       ledColor: Colors.white,
+//   //       icon: 'resource://drawable/res_app_ico',
+//   //     ),
+//   //   ],
+//   //   debug: true,
+//   // );
+
+
 // }
 
 class Home1 extends StatefulWidget {
@@ -78,8 +130,15 @@ class _Home1State extends State<Home1> {
     900: ColorHelper().white.withOpacity(0),
   };
 
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  final Future<SharedPreferences> _prefs2 = SharedPreferences.getInstance();
+  @override
+  void initState() {
+    // AwesomeNotifications().isNotificationAllowed().then((value) {
+    //   if (!value) {
+    //     AwesomeNotifications().requestPermissionToSendNotifications();
+    //   }
+    // });
+  
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +157,7 @@ class _Home1State extends State<Home1> {
       ..maskColor = Color.fromARGB(255, 24, 25, 26).withOpacity(0.1)
       ..userInteractions = false
       ..dismissOnTap = false;
+
     return GetMaterialApp(
       translations: Messages(),
       locale: Get.locale ?? Get.deviceLocale,
@@ -112,8 +172,38 @@ class _Home1State extends State<Home1> {
             ? Splash()
             : token == null
                 ? Login()
-                : Home(user: user),
+                : Home(user:user),
+
+        // body: Test(),
       ),
     );
   }
 }
+
+int createUniqueId() {
+  return DateTime.now().millisecondsSinceEpoch.remainder(100000);
+}
+
+// Future notify(RemoteMessage m) async {
+//   var tmp = m.data as Map;
+//   var local = Get.locale;
+
+//   //* AwesomeNotifications().createNotification(
+//   //     content: NotificationContent(
+//   //       id: createUniqueId(),
+//   //       channelKey: 'MySkul',
+//   //       title: tmp['nom'],
+//   //       body: tmp['message'],
+//   //       summary: tmp['groupe'],
+//   //       largeIcon: tmp['image'],
+//   //       roundedLargeIcon: true,
+//   //       notificationLayout: NotificationLayout.Messaging,
+//   //     ),
+//   //     actionButtons: [
+//   //       NotificationActionButton(
+//   //           key: 'key',
+//   //           label: Get.locale.toString().contains('en') ? 'ANSWER' : 'REPONDRE')
+//   //     ]);
+
+
+// }

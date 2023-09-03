@@ -39,7 +39,7 @@ class Quiz3 extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
-                        child: const Column(
+                        child:  Column(
                           children: [
                             SizedBox(
                               height: 50,
@@ -125,7 +125,7 @@ class Quiz3 extends StatelessWidget {
                     height: 50,
                     child: TextButton(
                       onPressed: () {},
-                      child: const Padding(
+                      child: Padding(
                         padding: EdgeInsets.all(0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

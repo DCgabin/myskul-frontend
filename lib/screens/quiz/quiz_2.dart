@@ -66,7 +66,7 @@ class Quiz2 extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              const Expanded(
+                               Expanded(
                                 flex: 5,
                                 child: Padding(
                                   padding:
@@ -105,7 +105,7 @@ class Quiz2 extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(5),
                                     color: const Color(0xff2bb799),
                                   ),
-                                  child: const Column(
+                                  child:  Column(
                                     children: [
                                       SizedBox(
                                         height: 6,
@@ -193,7 +193,7 @@ class Quiz2 extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(5),
                                     color: Colors.black.withOpacity(.48),
                                   ),
-                                  child: const Column(
+                                  child: Column(
                                     children: [
                                       SizedBox(
                                         height: 6,

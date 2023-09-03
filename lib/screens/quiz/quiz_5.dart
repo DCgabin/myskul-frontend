@@ -39,7 +39,7 @@ class Quiz5 extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
-                        child: const Column(
+                        child:  Column(
                           children: [
                             SizedBox(
                               height: 50,
