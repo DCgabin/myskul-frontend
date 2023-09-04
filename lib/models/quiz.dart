@@ -33,12 +33,12 @@ class QuizModel {
   factory QuizModel.fromJson(Map<String, dynamic> json) {
     return new QuizModel(
       id: json['id'],
-      name:json['theme']['name'],
+      name:json['name'],
       score: json['score'],
       questions:json['questions'].toString(),
-      free: json['theme']['free'],
-      level: json['theme']['level_id'],
-      category: json['theme']['category_id'],
+      free: json['free'],
+      level: json['level_id'],
+      category: json['category_id'],
     );
   }
 }

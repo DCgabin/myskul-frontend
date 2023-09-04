@@ -14,7 +14,6 @@ class QuizController extends GetxController {
     var token;
     var quizList;
 
-    EasyLoading.show();
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     final SharedPreferences prefs = await _prefs;
 
@@ -28,12 +27,19 @@ class QuizController extends GetxController {
       var url =
           Uri.parse(ApiEndponits().baseUrl + ApiEndponits().endpoints.quizList);
 
+      EasyLoading.show();
+
       http.Response res = await http.get(url, headers: headers);
+
       final json = jsonDecode(res.body);
 
-      List quizList = (json as List)
-                      .map((data) => QuizModel.fromJson(data))
-                      .toList();
+      var tmp1 = json as Map;
+      var tmp2 = tmp1['data']['quizzes'];
+
+      List quizList =
+          List.generate(tmp2.length, (index) => QuizModel.fromJson(tmp2[index]));
+
+      // List quizList =  (json as List).map((data) => QuizModel.fromJson(data)).toList();
 
       EasyLoading.dismiss();
 

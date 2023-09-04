@@ -44,13 +44,7 @@ class _HomeState extends State<Home> {
     "image1.png",
   ];
 
-  getUser() async {
-    final SharedPreferences prefs = await _prefs;
-
-    var userString = await prefs.getString('user');
-    var userJson = jsonDecode(userString!);
-    widget.user = User.fromJson(userJson);
-  }
+ 
 
   @override
   Widget build(BuildContext context) {

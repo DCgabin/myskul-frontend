@@ -40,7 +40,7 @@ void main() async {
   await Firebase.initializeApp(); // Initialisation de firebase
 
   // Initialisation de firebase messaging et awesome notifications
- // await messagingInit();
+  // await messagingInit();
 
   // Initialisation du package SharedPreferences
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -49,6 +49,7 @@ void main() async {
   // lignes de codes afférentes aux SharedPreferences
 
   await shMethods(prefs);
+  await getUser(prefs);
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
@@ -56,10 +57,18 @@ void main() async {
   );
 }
 
+getUser(SharedPreferences prefs) async {
+  var userString = await prefs.getString('user');
+  if (userString != null) {
+    var userJson = jsonDecode(userString);
+    user = User.fromJson(userJson);
+  }
+}
+
 Future<void> shMethods(SharedPreferences prefs) async {
   seen = await prefs.getBool('first');
   token = await prefs.getString('token');
- // fmToken = await prefs.getString('fmToken');
+  // fmToken = await prefs.getString('fmToken');
   locale = await prefs.getString('locale');
 
   if (locale != null) {
@@ -108,7 +117,6 @@ Future<void> shMethods(SharedPreferences prefs) async {
 //   //   debug: true,
 //   // );
 
-
 // }
 
 class Home1 extends StatefulWidget {
@@ -137,7 +145,6 @@ class _Home1State extends State<Home1> {
     //     AwesomeNotifications().requestPermissionToSendNotifications();
     //   }
     // });
-  
   }
 
   @override
@@ -172,7 +179,7 @@ class _Home1State extends State<Home1> {
             ? Splash()
             : token == null
                 ? Login()
-                : Home(user:user),
+                : Home(user: user),
 
         // body: Test(),
       ),
