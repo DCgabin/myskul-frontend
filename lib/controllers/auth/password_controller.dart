@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:myskul/screens/auth/login.dart';
+import 'package:myskul/screens/auth/password2.dart';
 import 'package:myskul/utilities/api_endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -29,9 +30,12 @@ class PasswordController extends GetxController {
       EasyLoading.dismiss();
 
       if (res.statusCode == 200) {
+        // Initialisation du package SharedPreferences
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
         var json = jsonDecode(res.body);
         EasyLoading.showSuccess(json["message"]);
-        Get.off(Login());
+        await prefs.setBool('reset', true);
+        Get.off(Password2());
       } else {
         throw jsonDecode(res.body)['message'] ?? "unknown-error".tr;
       }
@@ -66,6 +70,10 @@ class PasswordController extends GetxController {
       if (res.statusCode == 200) {
         final json = jsonDecode(res.body);
         EasyLoading.showSuccess(json['message']);
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        await prefs.setBool('reset', false);
+
         Get.off(Login());
       } else {
         throw jsonDecode(res.body)['message'] ?? "unknown-error".tr;

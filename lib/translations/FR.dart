@@ -29,6 +29,8 @@ class FR {
     'password-recov-title2': 'MOT DE PASSE',
     'password-recov-text':
         'Veuillez entrer votre email de connexion. Nous vous enverrons un e-mail avec un lien pour réinitialiser votre mot de passe.',
+    'password-recov-text2':
+    'Veuillez entrer votre email de connexion, et le token qui vous a été envoyé sur votre email.',
     'password-reset-title': 'REINITIALISATION DE',
     'password-reset-title2': 'MOT DE PASSE',
     'password-reset-text':
@@ -136,5 +138,7 @@ class FR {
     'ccm': 'Course contre la montre',
     'pay-text': 'Pour accéder aux autres quiz, veuillez souscrire à un abonnement',
     'pay-process': 'VOIR LES PLANS',
+    'token2': 'Envoyer un nouveau token',
+
   };
 }

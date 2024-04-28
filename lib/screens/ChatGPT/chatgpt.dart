@@ -59,7 +59,8 @@ class _GPTState extends State<GPT> {
   // }
 
   sendRequest(String msg) async {
-    final openAI = OpenAI.instance.build(
+    print(">>>>>>>>>>>>>>>>>");
+    final openAI =  OpenAI.instance.build(
         token: Constant().MS,
         baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 20)),
         enableLog: true);
@@ -77,6 +78,8 @@ class _GPTState extends State<GPT> {
       // print('AI response ' + response!.choices[0].text);
       var text = " ";
       final response = await openAI.onChatCompletion(request: request);
+      print("<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+      print("réponse "+response.toString());
       for (var element in response!.choices) {
         text += " ${element.message?.content}";
         print("data -> ${element.message?.content}");
@@ -92,6 +95,8 @@ class _GPTState extends State<GPT> {
       };
       messages.add(tmp);
     } catch (e) {
+      print("errorrrrrrr>>>>>>>>>>>>>>>>>>>><<");
+      print(e);
       var tmp = {
         'message': 'ai-error'.tr,
         'sender': 'chatGPT',

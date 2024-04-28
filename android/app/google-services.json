@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1093886089568:android:b2f52751b9c91daedea605",
         "android_client_info": {
-          "package_name": "com.example.myskul"
+          "package_name": "com.mobile.myskul"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "1093886089568-mc4uvf6dclgk044scgaa3m5bc3gs1m98.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.myskul",
+            "package_name": "com.mobile.myskul",
             "certificate_hash": "9240ab74cfdc5e8745e680cd22942370885af5b6"
           }
         },

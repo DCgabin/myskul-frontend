@@ -462,7 +462,7 @@ class _HomepageScaffoldState extends State<HomepageScaffold> {
                                   Get.to(() => LeaderBoard(user: widget.user));
                                 },
                               ),
-                              DashBox(
+                             /* DashBox(
                                 icone: IconHelper().shop,
                                 texte: "My AI",
                                 couleur: ColorHelper().lightGreen,
@@ -479,7 +479,7 @@ class _HomepageScaffoldState extends State<HomepageScaffold> {
                                 function: () {
                                   Get.to(() => Fitness());
                                 },
-                              ),
+                              ),*/
                               SizedBox()
                             ],
                           ),

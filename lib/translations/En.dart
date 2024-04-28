@@ -29,6 +29,8 @@ class EN {
     'password-recov-title2': 'PASSWORD',
     'password-recov-text':
         'Please enter your email address. We will send you an email with a link to reset your password.',
+    'password-recov-text2':
+    'Please enter your login email and the token sent to your email address.',
     'password-reset-title': 'RESET',
     'password-reset-title2': 'PASSWORD',
     'password-reset-text': 'Please enter your new password.',
@@ -135,5 +137,6 @@ class EN {
     'ccm': 'Race against the clock',
     'pay-text': 'To access the other quizzes, please subscribe',
     'pay-process': 'SEE SUBSCRIPTION PLANS',
+    'token2': 'Send a new token',
   };
 }

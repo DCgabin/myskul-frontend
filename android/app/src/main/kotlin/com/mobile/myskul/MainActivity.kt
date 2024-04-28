@@ -1,4 +1,4 @@
-package com.example.myskul
+package com.mobile.myskul
 
 import io.flutter.embedding.android.FlutterActivity
 

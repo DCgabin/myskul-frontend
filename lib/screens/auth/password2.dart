@@ -1,55 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myskul/controllers/auth/password_controller.dart';
+import 'package:myskul/screens/auth/password.dart';
+import 'package:myskul/screens/auth/register.dart';
 import 'package:myskul/utilities/colors.dart';
 import 'package:myskul/utilities/icons.dart';
 import 'package:myskul/utilities/texts.dart';
 import 'package:myskul/components/button_g.dart';
 import 'package:myskul/components/input.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:myskul/screens/auth/reset.dart';
 
-class Reset extends StatefulWidget {
-  Reset({required this.email, required this.token});
-  var email;
-  var token;
 
-  @override
-  State<Reset> createState() => _ResetState();
-}
-
-class _ResetState extends State<Reset> {
+class Password2 extends StatelessWidget {
   var couleurs = ColorHelper();
-
   var textes = TextHelper();
-
   var icones = IconHelper();
-
   var controller = TextEditingController();
-
-  var onSubmit = (String a) {};
-
-  var keyboardType = TextInputType.visiblePassword;
-
-  var hintText = "new-password";
-
-  var prefixIcon = Icon(Icons.lock);
-
   var controller2 = TextEditingController();
 
-  var onSubmit2 = (String a) {};
-
-  var keyboardType2 = TextInputType.visiblePassword;
-
-  var hintText2 = "password-conf";
-
-  var prefixIcon2 = Icon(Icons.lock);
-
-  bool obscureText = true;
-
-  bool obscureText2 = true;
+  var onSubmit = (String a) {};
+  var keyboardType = TextInputType.emailAddress;
+  var hintText = "email";
+  var prefixIcon = Icon(Icons.person);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +36,7 @@ class _ResetState extends State<Reset> {
           children: [
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 1.1,
+              height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                   color: couleurs.white.withOpacity(0.5),
                   image: DecorationImage(
@@ -72,8 +49,8 @@ class _ResetState extends State<Reset> {
                 children: [
                   WidgetAnimator(
                     incomingEffect:
-                        WidgetTransitionEffects.incomingSlideInFromTop(
-                            duration: Duration(milliseconds: 500)),
+                    WidgetTransitionEffects.incomingSlideInFromTop(
+                        duration: Duration(milliseconds: 500)),
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Image.asset(
@@ -84,8 +61,8 @@ class _ResetState extends State<Reset> {
                   Container(),
                   WidgetAnimator(
                     incomingEffect:
-                        WidgetTransitionEffects.incomingSlideInFromBottom(
-                            duration: Duration(milliseconds: 500)),
+                    WidgetTransitionEffects.incomingSlideInFromBottom(
+                        duration: Duration(milliseconds: 500)),
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: Image.asset(
@@ -123,7 +100,7 @@ class _ResetState extends State<Reset> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              "password-reset-title".tr,
+                              "password-recov-title".tr,
                               style: GoogleFonts.getFont('Lato',
                                   textStyle: textes.h1l),
                             ),
@@ -131,7 +108,7 @@ class _ResetState extends State<Reset> {
                               height: 10,
                             ),
                             Text(
-                              "password-reset-title2".tr,
+                              "password-recov-title2".tr,
                               style: GoogleFonts.getFont('Lato',
                                   textStyle: textes.h1l),
                             ),
@@ -143,7 +120,7 @@ class _ResetState extends State<Reset> {
                         SizedBox(
                             width: 300,
                             child: Text(
-                              "password-reset-text".tr,
+                              "password-recov-text2".tr,
                               style: textes.h4l,
                               textAlign: TextAlign.center,
                             )),
@@ -151,58 +128,93 @@ class _ResetState extends State<Reset> {
                           height: 15,
                         ),
                         NewInput(
-                            obscureText: obscureText,
                             controller: controller,
                             onSubmit: onSubmit,
                             keyboardType: keyboardType,
                             hintText: hintText,
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                obscureText = !obscureText;
-                                setState(() {});
-                              },
-                              child: obscureText
-                                  ? Icon(Icons.visibility)
-                                  : Icon(Icons.visibility_off),
-                            ),
                             prefixIcon: prefixIcon),
+                        SizedBox(
+                          height: 5,
+                        ),
+
+
                         NewInput(
-                            obscureText: obscureText2,
                             controller: controller2,
-                            onSubmit: onSubmit2,
-                            keyboardType: keyboardType2,
-                            hintText: hintText2,
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                obscureText2 = !obscureText2;
-                                setState(() {});
-                              },
-                              child: obscureText
-                                  ? Icon(Icons.visibility)
-                                  : Icon(Icons.visibility_off),
+                            onSubmit: onSubmit,
+                            keyboardType: keyboardType,
+                            hintText: "token ",
+                            prefixIcon: prefixIcon),
+                        SizedBox(
+                          height: 5,
+                        ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "".tr,
+                              style: textes.h4l,
                             ),
-                            prefixIcon: prefixIcon2),
+                            GestureDetector(
+                              onTap: () async{
+                                final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                await prefs.setBool('reset', false);
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return Password();
+                                    }));
+                              },
+                              child: Text(
+                                "token2".tr,
+                                style: textes.h4l
+                                    .copyWith(color: couleurs.green),
+                              ),
+                            )
+                          ],
+                        ),
                         SizedBox(
                           height: 30,
                         ),
                         NewButtonG(
-                          text: "reset",
+                          text: "next",
                           function: () {
-                            if (controller.text.isEmpty) {
+                            if (controller.text.isEmpty||controller2.text.isEmpty) {
                               EasyLoading.showError("no-input".tr);
-                            } else if (controller2.text.isEmpty ||
-                                controller2.text.isEmpty !=
-                                    controller.text.isEmpty) {
-                              EasyLoading.showError("pwd-egal".tr);
                             } else {
-                              PasswordController().reset(widget.email, controller.text,
-                                  controller2.text, widget.token);
+                              Get.to(Reset(
+                                  token: controller2.text,
+                                  email: controller.text));
+                              ;
+                             // PasswordController().password(controller.text);
                             }
                           },
                         ),
                         SizedBox(
                           height: 30,
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "new-here1".tr,
+                              style: textes.h4l,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return Register();
+                                    }));
+                              },
+                              child: Text(
+                                "new-here2".tr,
+                                style: textes.h4l
+                                    .copyWith(color: couleurs.green),
+                              ),
+                            )
+                          ],
+                        ),
+
                       ],
                     ),
                   ),

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myskul/controllers/auth/login_controller.dart';
 import 'package:myskul/screens/auth/password.dart';
+import 'package:myskul/screens/auth/password2.dart';
 import 'package:myskul/screens/auth/register.dart';
 import 'package:myskul/utilities/colors.dart';
 import 'package:myskul/utilities/icons.dart';
@@ -60,6 +61,7 @@ class _LoginState extends State<Login> {
     final SharedPreferences prefs2 = await _prefs2;
     bool? seen = await prefs2.getBool('first');
     String? token = await prefs.getString('token');
+    bool? reset = await prefs2.getBool('first');
   }
 
   @override
@@ -229,8 +231,17 @@ class _LoginState extends State<Login> {
                               style: textes.h4l,
                             ),
                             GestureDetector(
-                              onTap: () {
-                                Get.to(Password());
+                              onTap: () async{
+                                final SharedPreferences prefs2 = await _prefs2;
+                                bool? reset = await prefs2.getBool('reset');
+                                reset==null?reset=false:true;
+
+                                print("valeur de rst");
+                                print(reset);
+                                if(reset)
+                                  Get.to(Password2());
+                                else
+                                  Get.to(Password());
                               },
                               child: Text(
                                 "forgot-password2".tr,

@@ -74,11 +74,22 @@ class SubscriptionController {
     var url = Uri.parse(
         ApiEndponits().baseUrl + ApiEndponits().endpoints.subscription);
 
+   /* var url = Uri.parse(
+        ApiEndponits().baseUrl + "/payment/status/98196576");*/
+
     Map<String, String?> data = subscription.toJson();
 
     EasyLoading.show();
 
-    try {
+   /* http.Response res =
+    await http.post(url, headers: headers, body: jsonEncode(data));
+
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+token.toString());
+    print(res);
+
+    EasyLoading.dismiss();*/
+
+     try {
       http.Response res =
           await http.post(url, headers: headers, body: jsonEncode(data));
       EasyLoading.dismiss();
@@ -94,5 +105,6 @@ class SubscriptionController {
       EasyLoading.showInfo("$e");
       return false;
     }
+    return false;
   }
 }
